@@ -1,10 +1,7 @@
-# This example requires the 'message_content' intent.
-
 import discord
 import json
 
 #pour config.json
-
 with open('config.json') as f:
     d = json.load(f)
     
