@@ -1,26 +1,27 @@
 import discord
+from discord.ext import commands
+from discord import app_commands
 import json
 
-#pour config.json
 with open('config.json') as f:
     d = json.load(f)
-    
 
 intents = discord.Intents.default()
 intents.message_content = True
 
-client = discord.Client(intents=intents)
+bot = commands.Bot(command_prefix="$", intents=intents)
 
-@client.event
+@bot.event
 async def on_ready():
-    print(f'We have logged in as {client.user}')
+    await bot.tree.sync()
+    print(f"Logged in as {bot.user}")
 
-@client.event
-async def on_message(message):
-    if message.author == client.user:
-        return
+@bot.tree.command(name="first_slash")
+async def first_slash(interaction: discord.Interaction):
+    await interaction.response.send_message("You executed the slash command!")
 
-    if message.content.startswith('$hello'):
-        await message.channel.send('Hello!')
 
-client.run(d['token'])
+#cmd = bot.tree.get_command("first_slash")
+#bot.tree.remove_command(cmd.name)
+
+bot.run(d['token'])
